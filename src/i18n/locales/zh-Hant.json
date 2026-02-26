@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Avocado SenseL - 跨場域 XDR 平台",
+    "title": "Avocado SenseL - 新世代 XDR 資安管理平台",
     "description": "SenseL Multi-Field XDR：整合 IT、AIoT 與 OT 的資安偵測與應變平台，以 LLM 輔助事件分析與報告產出。"
   },
   "nav": {
@@ -12,10 +12,10 @@
     "demo": "申請試用"
   },
   "hero": {
-    "badge": "跨場域 XDR 平台",
+    "badge": "新世代 XDR 資安管理平台",
     "title": {
       "line1": "Avocado SenseL",
-      "line2": "跨場域 XDR 資安平台"
+      "line2": "新世代 XDR 資安管理平台"
     },
     "subtitle": "打破 IT、AIoT 與 OT 的資料孤島。SenseL XDR 將端點、網路與日誌資料統一整合至單一平台 — 由 LLM 驅動，將龐雜的事件數據轉化為清晰、可執行的報告。",
     "cta": {

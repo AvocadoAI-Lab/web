@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Avocado SenseL - Multi-Field XDR Platform",
+    "title": "Avocado SenseL - Next-Gen XDR Security Platform",
     "description": "SenseL Multi-Field XDR: A detection and response platform unifying IT, AIoT, and OT security, with LLM-assisted event analysis and reporting."
   },
   "nav": {
@@ -12,10 +12,10 @@
     "demo": "Request Demo"
   },
   "hero": {
-    "badge": "Multi-Field XDR Platform",
+    "badge": "Next-Gen XDR Security Platform",
     "title": {
       "line1": "Avocado SenseL",
-      "line2": "Multi-Field XDR Platform"
+      "line2": "Next-Gen XDR Security Platform"
     },
     "subtitle": "Break down data silos across IT, AIoT, and OT. SenseL XDR unifies endpoint, network, and log data into a single platform — powered by LLM to transform complex event data into clear, actionable reports.",
     "cta": {

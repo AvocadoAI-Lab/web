@@ -32,9 +32,9 @@ function PersonaCard({ icon: Icon, title, description, points }: PersonaCardProp
         {points.map((point) => (
           <li
             key={point}
-            className="flex items-baseline gap-2 text-sm text-muted-foreground"
+            className="grid grid-cols-[16px_1fr] gap-2 text-sm text-muted-foreground"
           >
-            <CheckCircle className="h-4 w-4 shrink-0 translate-y-[2px] text-primary" />
+            <CheckCircle className="mt-[3px] h-4 w-4 text-primary" />
             <span>{point}</span>
           </li>
         ))}
