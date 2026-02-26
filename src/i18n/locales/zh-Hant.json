@@ -1,0 +1,168 @@
+{
+  "metadata": {
+    "title": "Avocado SenseL - 跨場域 XDR 平台",
+    "description": "SenseL Multi-Field XDR：整合 IT、AIoT 與 OT 的資安偵測與應變平台，以 LLM 輔助事件分析與報告產出。"
+  },
+  "nav": {
+    "features": "功能特色",
+    "architecture": "架構",
+    "audience": "適用產業",
+    "cases": "使用者訪談",
+    "contact": "聯絡我們",
+    "demo": "申請試用"
+  },
+  "hero": {
+    "badge": "跨場域 XDR 平台",
+    "title": {
+      "line1": "Avocado SenseL",
+      "line2": "跨場域 XDR 資安平台"
+    },
+    "subtitle": "打破 IT、AIoT 與 OT 的資料孤島。SenseL XDR 將端點、網路與日誌資料統一整合至單一平台 — 由 LLM 驅動，將龐雜的事件數據轉化為清晰、可執行的報告。",
+    "cta": {
+      "demo": "預約產品展示",
+      "learn": "了解更多"
+    },
+    "stats": {
+      "s1Value": "1-3 天",
+      "s1Label": "遠端部署",
+      "s2Value": "7×24",
+      "s2Label": "持續監控",
+      "s3Value": "<2小時",
+      "s3Label": "高度警訊 SLA"
+    }
+  },
+  "features": {
+    "title": "核心功能",
+    "subtitle": "從端點到工控系統，跨場域的偵測與應變",
+    "narrative": {
+      "title": "SenseL Narrative AI",
+      "description": "基於 LLM 的資安事件分析工具。自動將事件數據整理為結構化報告，包含攻擊鏈重建、根本原因分析及處置建議。"
+    },
+    "xdr": {
+      "title": "跨場域 XDR 平台",
+      "description": "在單一平台整合 IT、AIoT 與 OT 資安數據。跨場域關聯分析引擎提供完整事件視圖，支援 MITRE ATT&CK 及 ICS ATT&CK 框架映射。"
+    },
+    "edr": {
+      "title": "端點偵測 (EDR)",
+      "description": "輕量級代理程式，支援主機層行為偵測、惡意進程監控、檔案完整性檢查及弱點掃描，適用於 Windows 與 Linux 環境。"
+    },
+    "ndr": {
+      "title": "網路偵測 (NDR)",
+      "description": "提供 pfSense 虛擬化設備與 Z200 工控級實體設備，支援 Modbus、S7、BACnet、Ethernet/IP 等工業協定解析。"
+    },
+    "dashboard": {
+      "title": "CSO 戰情室儀表板",
+      "description": "整合式 XDR 儀表板，呈現即時安全狀態，支援自動週報與月報產出，可一鍵生成中英雙語分析報告。"
+    },
+    "nocap": {
+      "title": "隱私優先架構",
+      "description": "不儲存 PCAP 封包內容，僅擷取事件元數據進行分析，降低儲存成本並簡化隱私法規合規流程。"
+    }
+  },
+  "cases": {
+    "title": "使用者訪談",
+    "subtitle": "來自真實訪談的需求回饋",
+    "painLabel": "痛點",
+    "expectLabel": "期望",
+    "case1": {
+      "name": "陳先生",
+      "role": "製造業廠務經理",
+      "background": "負責某中型工廠的生產線維運，對 IT 技術了解有限，但深知產線自動化設備（PLC、SCADA）的重要性。",
+      "pain": "擔心勒索軟體或網路攻擊會癱瘓生產線，造成巨大經濟損失。現有的防毒軟體無法保護老舊的工控系統。",
+      "expectation": "需要一個不會干擾生產、能看懂工控協定、並在發生問題時能快速定位原因的「工廠專用防火牆」。"
+    },
+    "case2": {
+      "name": "林小姐",
+      "role": "中小企業 IT 主管",
+      "background": "一人 IT 部門，負責公司所有伺服器、員工電腦、網路設備及新導入的智慧辦公 IoT 裝置。",
+      "pain": "每天被大量零散的告警淹沒，沒有時間和精力去深入分析每個事件。預算有限，無法購買昂貴的 SIEM 系統或組建專職資安團隊。",
+      "expectation": "一個能自動將相關事件串連起來，直接告訴她「發生了什麼事」和「該如何處理」的平台。"
+    }
+  },
+  "architecture": {
+    "title": "平台架構",
+    "core": "SenseL AI 引擎",
+    "layers": {
+      "data": "資料蒐集",
+      "lake": "XDR 數據湖",
+      "ai": "Narrative AI 分析",
+      "presentation": "戰情室與回應"
+    },
+    "integrations": "資料來源與整合",
+    "integrationsList": {
+      "edr": "端點設備 (EDR)",
+      "ndr": "防火牆 / NDR",
+      "syslog": "Syslog 來源",
+      "stix": "STIX/TAXII 情報",
+      "api": "REST API",
+      "pdf": "PDF 報告"
+    }
+  },
+  "audience": {
+    "title": "適用產業",
+    "subtitle": "適用於需要整合 IT 與 OT 資安管理的各類組織",
+    "manufacturing": {
+      "title": "製造業與 OT",
+      "description": "在不影響產線運作的前提下，為工控系統提供資安偵測與防護。",
+      "points": {
+        "p1": "OT 協定解析 (Modbus, S7, BACnet)",
+        "p2": "Z200 工控級 NDR 適用嚴苛工業環境",
+        "p3": "攻擊鏈分析協助追蹤供應鏈資安事件"
+      }
+    },
+    "enterprise": {
+      "title": "中小企業與企業 IT",
+      "description": "無論是一人 IT 或完整 SOC 團隊，SenseL 自動關聯事件並提供處置建議。",
+      "points": {
+        "p1": "統一 EDR + NDR + 日誌關聯分析",
+        "p2": "LLM 輔助分析減少人工判讀負擔",
+        "p3": "支援合規報告產出 (ISO 27001, NIST)"
+      }
+    },
+    "critical": {
+      "title": "醫療與政府機構",
+      "description": "以隱私優先架構保護敏感資料，支援合規需求。",
+      "points": {
+        "p1": "不儲存 PCAP 確保資料主權",
+        "p2": "多租戶雲端管理適用 MSSP",
+        "p3": "中英雙語報告輸出"
+      }
+    }
+  },
+  "cta": {
+    "title": "三步驟開始使用",
+    "subtitle": "從諮詢到部署完成，最快 1-3 個工作天。",
+    "steps": {
+      "s1title": "諮詢",
+      "s1desc": "聯繫我們，由專人協助您評估需求與適合的方案。",
+      "s2title": "部署",
+      "s2desc": "透過安裝引導與遠端協助，快速完成環境設定。",
+      "s3title": "上線",
+      "s3desc": "開始使用 7×24 持續監控與事件分析服務。"
+    },
+    "demo": "預約產品展示",
+    "contact": "聯絡業務",
+    "email": "rain.chung@ai-avocado.com"
+  },
+  "footer": {
+    "tagline": "整合 AI 輔助分析的跨場域 XDR 資安平台。",
+    "product": "產品",
+    "company": "公司",
+    "resources": "資源",
+    "rights": "版權所有。",
+    "companyName": "酪梨智慧有限公司",
+    "address": "臺北市信義區松山路287巷16號2樓",
+    "links": {
+      "features": "功能特色",
+      "demo": "申請試用",
+      "about": "關於我們",
+      "contact": "聯絡方式",
+      "docs": "技術文件",
+      "support": "技術支援"
+    }
+  },
+  "language": {
+    "en": "English",
+    "zh-Hant": "繁體中文"
+  }
+}

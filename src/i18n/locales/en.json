@@ -1,0 +1,168 @@
+{
+  "metadata": {
+    "title": "Avocado SenseL - Multi-Field XDR Platform",
+    "description": "SenseL Multi-Field XDR: A detection and response platform unifying IT, AIoT, and OT security, with LLM-assisted event analysis and reporting."
+  },
+  "nav": {
+    "features": "Features",
+    "architecture": "Architecture",
+    "audience": "Industries",
+    "cases": "Interviews",
+    "contact": "Contact",
+    "demo": "Request Demo"
+  },
+  "hero": {
+    "badge": "Multi-Field XDR Platform",
+    "title": {
+      "line1": "Avocado SenseL",
+      "line2": "Multi-Field XDR Platform"
+    },
+    "subtitle": "Break down data silos across IT, AIoT, and OT. SenseL XDR unifies endpoint, network, and log data into a single platform — powered by LLM to transform complex event data into clear, actionable reports.",
+    "cta": {
+      "demo": "Schedule a Demo",
+      "learn": "Learn More"
+    },
+    "stats": {
+      "s1Value": "1-3 Days",
+      "s1Label": "Remote Deployment",
+      "s2Value": "7×24",
+      "s2Label": "Continuous Monitoring",
+      "s3Value": "<2hrs",
+      "s3Label": "Critical Alert SLA"
+    }
+  },
+  "features": {
+    "title": "Core Features",
+    "subtitle": "Detection and response from endpoints to industrial control systems",
+    "narrative": {
+      "title": "SenseL Narrative AI",
+      "description": "LLM-based security event analysis tool. Automatically organizes event data into structured reports, including kill chain reconstruction, root cause analysis, and remediation recommendations."
+    },
+    "xdr": {
+      "title": "Multi-Field XDR Platform",
+      "description": "Unify IT, AIoT, and OT security data in a single platform. Cross-field correlation engine provides a complete event view with MITRE ATT&CK and ICS ATT&CK framework mapping."
+    },
+    "edr": {
+      "title": "Endpoint Detection (EDR)",
+      "description": "Lightweight agents for host-level behavior detection, malicious process monitoring, file integrity checks, and vulnerability scanning across Windows and Linux environments."
+    },
+    "ndr": {
+      "title": "Network Detection (NDR)",
+      "description": "pfSense virtual appliances and Z200 industrial-grade OT NDR devices with protocol inspection for Modbus, S7, BACnet, and Ethernet/IP."
+    },
+    "dashboard": {
+      "title": "CSO War Room Dashboard",
+      "description": "Unified XDR dashboard showing real-time security status, with automated weekly and monthly reports, and one-click bilingual (Chinese/English) analysis reports."
+    },
+    "nocap": {
+      "title": "Privacy-First Architecture",
+      "description": "No PCAP storage by design. Only event metadata is extracted and analyzed, reducing storage costs and simplifying privacy compliance."
+    }
+  },
+  "cases": {
+    "title": "User Interviews",
+    "subtitle": "Real feedback from user research interviews",
+    "painLabel": "Pain Point",
+    "expectLabel": "Expectation",
+    "case1": {
+      "name": "Mr. Chen",
+      "role": "Manufacturing Plant Manager",
+      "background": "Manages production line operations at a mid-sized factory. Limited IT expertise, but understands the critical importance of automation equipment (PLC, SCADA).",
+      "pain": "Concerned that ransomware or cyberattacks could shut down production lines, causing significant financial loss. Existing antivirus software cannot protect legacy industrial control systems.",
+      "expectation": "A solution that doesn't disrupt production, understands industrial protocols, and can quickly pinpoint root causes when incidents occur."
+    },
+    "case2": {
+      "name": "Ms. Lin",
+      "role": "SMB IT Manager",
+      "background": "One-person IT department responsible for all servers, employee workstations, network devices, and newly deployed smart office IoT devices.",
+      "pain": "Overwhelmed by a high volume of fragmented alerts daily, with no time or resources to deeply analyze each event. Limited budget — unable to afford expensive SIEM systems or build a dedicated security team.",
+      "expectation": "A platform that automatically correlates related events and directly tells her what happened and what to do next."
+    }
+  },
+  "architecture": {
+    "title": "Platform Architecture",
+    "core": "SenseL AI Engine",
+    "layers": {
+      "data": "Data Collection",
+      "lake": "XDR Data Lake",
+      "ai": "Narrative AI Analysis",
+      "presentation": "War Room & Response"
+    },
+    "integrations": "Data Sources & Integrations",
+    "integrationsList": {
+      "edr": "Edge Devices (EDR)",
+      "ndr": "Firewall / NDR",
+      "syslog": "Syslog Sources",
+      "stix": "STIX/TAXII Feeds",
+      "api": "REST API",
+      "pdf": "PDF Reports"
+    }
+  },
+  "audience": {
+    "title": "Industries",
+    "subtitle": "For organizations that need unified IT and OT security management",
+    "manufacturing": {
+      "title": "Manufacturing & OT",
+      "description": "Security detection and protection for industrial control systems without disrupting production.",
+      "points": {
+        "p1": "OT protocol inspection (Modbus, S7, BACnet)",
+        "p2": "Z200 industrial-grade NDR for harsh environments",
+        "p3": "Kill chain analysis for tracking supply chain security events"
+      }
+    },
+    "enterprise": {
+      "title": "SMB & Enterprise IT",
+      "description": "Whether a one-person IT team or a full SOC — SenseL correlates events automatically and provides remediation guidance.",
+      "points": {
+        "p1": "Unified EDR + NDR + Log correlation",
+        "p2": "LLM-assisted analysis reduces manual review workload",
+        "p3": "Compliance reporting support (ISO 27001, NIST)"
+      }
+    },
+    "critical": {
+      "title": "Healthcare & Government",
+      "description": "Privacy-first architecture for protecting sensitive data, with compliance support.",
+      "points": {
+        "p1": "No PCAP storage for data sovereignty",
+        "p2": "Multi-tenant cloud management for MSSPs",
+        "p3": "Bilingual reporting (Chinese/English)"
+      }
+    }
+  },
+  "cta": {
+    "title": "Get Started in 3 Steps",
+    "subtitle": "From consultation to deployment — as fast as 1-3 business days.",
+    "steps": {
+      "s1title": "Consult",
+      "s1desc": "Contact us. We'll help assess your needs and recommend a suitable plan.",
+      "s2title": "Deploy",
+      "s2desc": "Guided installation with remote assistance for quick setup.",
+      "s3title": "Go Live",
+      "s3desc": "Start using 7×24 continuous monitoring and event analysis."
+    },
+    "demo": "Schedule a Demo",
+    "contact": "Contact Sales",
+    "email": "rain.chung@ai-avocado.com"
+  },
+  "footer": {
+    "tagline": "Multi-field XDR platform with AI-assisted analysis.",
+    "product": "Product",
+    "company": "Company",
+    "resources": "Resources",
+    "rights": "All rights reserved.",
+    "companyName": "AvocadoAI CO., LTD.",
+    "address": "2F, No. 16, Ln. 287, Songshan Rd., Xinyi Dist., Taipei City",
+    "links": {
+      "features": "Features",
+      "demo": "Request Demo",
+      "about": "About Us",
+      "contact": "Contact",
+      "docs": "Documentation",
+      "support": "Support"
+    }
+  },
+  "language": {
+    "en": "English",
+    "zh-Hant": "繁體中文"
+  }
+}
