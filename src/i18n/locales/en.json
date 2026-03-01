@@ -12,12 +12,12 @@
     "demo": "Request Demo"
   },
   "hero": {
-    "badge": "Next-Gen XDR Security Platform",
+    "badge": "AI Agent-Powered Next-Gen XDR Platform",
     "title": {
       "line1": "Avocado SenseL",
-      "line2": "Next-Gen XDR Security Platform"
+      "line2": "AI Agent-Powered Next-Gen XDR Platform"
     },
-    "subtitle": "Break down data silos across IT, AIoT, and OT. SenseL XDR unifies endpoint, network, and log data into a single platform — powered by LLM to transform complex event data into clear, actionable reports.",
+    "subtitle": "SenseL is built around AI Agents at its core, unifying NDR, EDR, and log data into a single platform. Break down data silos across IT, AIoT, and OT, leveraging LLM to transform complex event data into clear, actionable reports.",
     "cta": {
       "demo": "Schedule a Demo",
       "learn": "Learn More"
@@ -35,7 +35,7 @@
     "title": "Core Features",
     "subtitle": "Detection and response from endpoints to industrial control systems",
     "narrative": {
-      "title": "SenseL Narrative AI",
+      "title": "SenseL AI Agent",
       "description": "LLM-based security event analysis tool. Automatically organizes event data into structured reports, including kill chain reconstruction, root cause analysis, and remediation recommendations."
     },
     "xdr": {
@@ -44,7 +44,7 @@
     },
     "edr": {
       "title": "Endpoint Detection (EDR)",
-      "description": "Lightweight agents for host-level behavior detection, malicious process monitoring, file integrity checks, and vulnerability scanning across Windows and Linux environments."
+      "description": "Lightweight agents for host-level behavior detection, malicious process monitoring, file integrity checks, and vulnerability scanning across Windows, Linux, and Mac environments."
     },
     "ndr": {
       "title": "Network Detection (NDR)",
@@ -53,10 +53,6 @@
     "dashboard": {
       "title": "CSO War Room Dashboard",
       "description": "Unified XDR dashboard showing real-time security status, with automated weekly and monthly reports, and one-click bilingual (Chinese/English) analysis reports."
-    },
-    "nocap": {
-      "title": "Privacy-First Architecture",
-      "description": "No PCAP storage by design. Only event metadata is extracted and analyzed, reducing storage costs and simplifying privacy compliance."
     }
   },
   "cases": {
@@ -143,6 +139,22 @@
     "demo": "Schedule a Demo",
     "contact": "Contact Sales",
     "email": "rain.chung@ai-avocado.com"
+  },
+  "ces": {
+    "title": "CES 2025 Exhibition",
+    "subtitle": "Avocado SenseL exhibited at CES 2025, showcasing the next-gen AI-powered XDR security platform"
+  },
+  "partners": {
+    "title": "Partners",
+    "subtitle": "Partnering with industry leaders to build a more secure digital world",
+    "coconut": {
+      "name": "TXOne Networks",
+      "description": "A leading provider of IoT and OT cybersecurity solutions"
+    },
+    "wnc": {
+      "name": "Wistron NeWeb Corporation (WNC)",
+      "description": "A global leader in wireless communication and networking equipment manufacturing"
+    }
   },
   "footer": {
     "tagline": "Multi-field XDR platform with AI-assisted analysis.",

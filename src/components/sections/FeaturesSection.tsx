@@ -7,7 +7,6 @@ import {
   Monitor,
   Network,
   BarChart3,
-  ShieldOff,
 } from "lucide-react";
 import { FadeInView } from "../animations/FadeInView";
 import { StaggerContainer, staggerItem } from "../animations/StaggerContainer";
@@ -23,7 +22,6 @@ export function FeaturesSection() {
     { key: "edr", icon: Monitor },
     { key: "ndr", icon: Network },
     { key: "dashboard", icon: BarChart3 },
-    { key: "nocap", icon: ShieldOff },
   ] as const;
 
   return (
@@ -34,7 +32,7 @@ export function FeaturesSection() {
         </FadeInView>
 
         <StaggerContainer
-          className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+          className="mt-16 flex flex-wrap justify-center gap-6"
           staggerDelay={0.08}
         >
           {features.map(({ key, icon }) => (
@@ -44,6 +42,7 @@ export function FeaturesSection() {
               title={t(`${key}.title`)}
               description={t(`${key}.description`)}
               variants={staggerItem}
+              className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
             />
           ))}
         </StaggerContainer>

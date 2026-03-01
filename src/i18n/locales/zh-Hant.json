@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "title": "Avocado SenseL - 新世代 XDR 資安管理平台",
+    "title": "Avocado SenseL - 新世代資安平台",
     "description": "SenseL Multi-Field XDR：整合 IT、AIoT 與 OT 的資安偵測與應變平台，以 LLM 輔助事件分析與報告產出。"
   },
   "nav": {
@@ -12,12 +12,12 @@
     "demo": "申請試用"
   },
   "hero": {
-    "badge": "新世代 XDR 資安管理平台",
+    "badge": "由 AI Agent 驅動的新世代資安平台",
     "title": {
       "line1": "Avocado SenseL",
-      "line2": "新世代 XDR 資安管理平台"
+      "line2": "由 AI Agent 驅動的新世代資安平台"
     },
-    "subtitle": "打破 IT、AIoT 與 OT 的資料孤島。SenseL XDR 將端點、網路與日誌資料統一整合至單一平台 — 由 LLM 驅動，將龐雜的事件數據轉化為清晰、可執行的報告。",
+    "subtitle": "SenseL 以 AI Agent 為運作核心，將底層的 NDR、EDR 與日誌資料統一整合至單一平台。打破 IT、AIoT 與 OT 的資料孤島，透過 LLM 直接將龐雜的事件數據轉化為清晰、可執行的報告。",
     "cta": {
       "demo": "預約產品展示",
       "learn": "了解更多"
@@ -35,7 +35,7 @@
     "title": "核心功能",
     "subtitle": "從端點到工控系統，跨場域的偵測與應變",
     "narrative": {
-      "title": "SenseL Narrative AI",
+      "title": "SenseL AI Agent",
       "description": "基於 LLM 的資安事件分析工具。自動將事件數據整理為結構化報告，包含攻擊鏈重建、根本原因分析及處置建議。"
     },
     "xdr": {
@@ -44,7 +44,7 @@
     },
     "edr": {
       "title": "端點偵測 (EDR)",
-      "description": "輕量級代理程式，支援主機層行為偵測、惡意進程監控、檔案完整性檢查及弱點掃描，適用於 Windows 與 Linux 環境。"
+      "description": "輕量級代理程式，支援主機層行為偵測、惡意進程監控、檔案完整性檢查及弱點掃描，適用於 Windows、Linux 與 Mac 環境。"
     },
     "ndr": {
       "title": "網路偵測 (NDR)",
@@ -53,10 +53,6 @@
     "dashboard": {
       "title": "CSO 戰情室儀表板",
       "description": "整合式 XDR 儀表板，呈現即時安全狀態，支援自動週報與月報產出，可一鍵生成中英雙語分析報告。"
-    },
-    "nocap": {
-      "title": "隱私優先架構",
-      "description": "不儲存 PCAP 封包內容，僅擷取事件元數據進行分析，降低儲存成本並簡化隱私法規合規流程。"
     }
   },
   "cases": {
@@ -143,6 +139,22 @@
     "demo": "預約產品展示",
     "contact": "聯絡業務",
     "email": "rain.chung@ai-avocado.com"
+  },
+  "ces": {
+    "title": "CES 2025 參展紀錄",
+    "subtitle": "Avocado SenseL 於 CES 2025 展出，展示新世代 AI 驅動資安平台"
+  },
+  "partners": {
+    "title": "合作夥伴",
+    "subtitle": "攜手業界領導者，共同打造更安全的數位世界",
+    "coconut": {
+      "name": "椰棗科技",
+      "description": "專注於物聯網與 OT 資安解決方案的領導廠商"
+    },
+    "wnc": {
+      "name": "啟碁科技股份有限公司 (WNC)",
+      "description": "全球領先的無線通訊與網通設備製造商"
+    }
   },
   "footer": {
     "tagline": "整合 AI 輔助分析的跨場域 XDR 資安平台。",
