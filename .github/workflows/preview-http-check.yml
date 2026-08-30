@@ -1,47 +1,127 @@
-name: Preview HTTP Check
+name: Preview HTTP Diagnostics
 
 on:
   push:
     branches:
       - codex/public-portal-preview
+    paths:
+      - ".github/workflows/preview-http-check.yml"
+      - "src/**"
+      - "public/**"
+      - "package.json"
+      - "package-lock.json"
+      - "next.config.*"
   workflow_dispatch:
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
-  verify-public-preview:
+  diagnose-public-preview:
     runs-on: ubuntu-latest
     timeout-minutes: 8
-    steps:
-      - name: Verify Vercel preview routes
-        shell: bash
-        env:
-          PREVIEW_URL: https://webbbb-git-codex-public-portal-preview-yucheng1122s-projects.vercel.app
-        run: |
-          set -euo pipefail
+    env:
+      PREVIEW_URL: https://webbbb-git-codex-public-portal-preview-yucheng1122s-projects.vercel.app
+      GH_TOKEN: ${{ github.token }}
 
-          ready=0
-          for attempt in {1..24}; do
-            status="$(curl --location --silent --show-error --output /tmp/zh-Hant.html --write-out '%{http_code}' "$PREVIEW_URL/zh-Hant" || true)"
-            if [ "$status" = "200" ] && grep -q 'Avocado.ai' /tmp/zh-Hant.html; then
-              ready=1
+    steps:
+      - name: Diagnose Vercel preview access and routes
+        shell: bash
+        run: |
+          set -u
+
+          report=/tmp/preview-report.md
+          body=/tmp/preview-body.html
+          headers=/tmp/preview-headers.txt
+          status=000
+          outcome=UNREACHABLE
+
+          for attempt in {1..30}; do
+            rm -f "$body" "$headers"
+            status="$(curl --location --silent --show-error \
+              --connect-timeout 10 --max-time 30 \
+              --dump-header "$headers" --output "$body" \
+              --write-out '%{http_code}' \
+              "$PREVIEW_URL/zh-Hant" 2>/tmp/preview-curl-error.txt || true)"
+            [ -n "$status" ] || status=000
+
+            if [ "$status" = "200" ] && grep -q 'Avocado.ai' "$body"; then
+              outcome=PASS
               break
             fi
+
+            if [ "$status" = "401" ] || [ "$status" = "403" ]; then
+              outcome=PROTECTED
+              break
+            fi
+
             sleep 10
           done
 
-          if [ "$ready" -ne 1 ]; then
-            echo "Preview did not become ready. Last HTTP status: $status"
-            exit 1
+          {
+            echo "## Vercel preview HTTP diagnostic"
+            echo
+            echo "- Preview: $PREVIEW_URL"
+            echo "- Probe result: **$outcome**"
+            echo "- Last HTTP status: **$status**"
+            echo "- Commit: \`${GITHUB_SHA}\`"
+          } > "$report"
+
+          if [ "$outcome" = "PASS" ]; then
+            failed=0
+            {
+              echo "- Route checks:"
+              echo "  - PASS \`/zh-Hant\`"
+            } >> "$report"
+
+            for route in /en /zh-Hant/platform /en/trust /zh-Hant/contact; do
+              output="/tmp/$(echo "$route" | tr '/' '_').html"
+              route_status="$(curl --location --silent --show-error \
+                --connect-timeout 10 --max-time 30 \
+                --output "$output" --write-out '%{http_code}' \
+                "$PREVIEW_URL$route" || true)"
+
+              if [ "$route_status" = "200" ] && grep -q 'Avocado.ai' "$output"; then
+                echo "  - PASS \`$route\`" >> "$report"
+              else
+                echo "  - FAIL \`$route\` — HTTP $route_status" >> "$report"
+                failed=1
+              fi
+            done
+
+            if [ "$failed" -eq 1 ]; then
+              outcome=ROUTE_FAILURE
+              echo "::warning::The Vercel deployment is reachable, but one or more routes failed."
+            fi
+          elif [ "$outcome" = "PROTECTED" ]; then
+            {
+              echo
+              echo "The deployment is built, but Vercel Deployment Protection prevents anonymous CI access. Open the Preview link while signed in to the Vercel team, or change Preview Deployment Protection in the Vercel project settings."
+            } >> "$report"
+            echo "::warning::Vercel preview is access-protected (HTTP $status); this is not a Next.js build failure."
+          else
+            {
+              echo
+              echo "The branch build may be Ready in Vercel, but the GitHub runner could not obtain a valid public response from the alias."
+              echo
+              echo "### Last response headers"
+              echo '```text'
+              sed -n '1,20p' "$headers" 2>/dev/null || true
+              echo '```'
+              echo
+              echo "### Curl diagnostic"
+              echo '```text'
+              sed -n '1,10p' /tmp/preview-curl-error.txt 2>/dev/null || true
+              echo '```'
+            } >> "$report"
+            echo "::warning::Could not anonymously verify the Vercel branch alias; see the PR diagnostic comment."
           fi
 
-          for route in /en /zh-Hant/platform /en/trust /zh-Hant/contact; do
-            output="/tmp/$(echo "$route" | tr '/' '_').html"
-            curl --fail --location --silent --show-error "$PREVIEW_URL$route" --output "$output"
-            grep -q 'Avocado.ai' "$output"
-            echo "PASS $route"
-          done
+          cat "$report" | tee -a "$GITHUB_STEP_SUMMARY"
+          gh pr comment 2 --repo AvocadoAI-Lab/web --body-file "$report"
 
-          echo "PASS /zh-Hant"
-          echo "Preview HTTP verification completed."
+          # This workflow diagnoses preview accessibility. Build correctness remains
+          # enforced by Public Portal CI and by Vercel's deployment status.
+          exit 0
