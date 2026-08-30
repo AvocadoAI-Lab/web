@@ -1,145 +1,16 @@
-name: Bootstrap Avocado.ai public portal
+name: Bootstrap Avocado.ai public portal (archived)
 
 on:
-  push:
-    branches:
-      - codex/public-portal-mvp
-    paths:
-      - .codex-bootstrap/**
-      - .github/workflows/bootstrap-public-portal.yml
   workflow_dispatch:
 
 permissions:
-  contents: write
-
-env:
-  NEXT_TELEMETRY_DISABLED: "1"
-
-concurrency:
-  group: bootstrap-public-portal
-  cancel-in-progress: false
+  contents: read
 
 jobs:
-  build-validate-and-commit:
-    if: github.actor != 'github-actions[bot]'
+  archived:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-
     steps:
-      - name: Check out isolated portal branch
-        uses: actions/checkout@v7.0.1
-        with:
-          ref: codex/public-portal-mvp
-          fetch-depth: 0
-
-      - name: Reconstruct the complete Codex repository
-        shell: bash
+      - name: Explain archived bootstrap
         run: |
-          set -euo pipefail
-          rm -rf /tmp/avocado-portal /tmp/original-workflows
-          mkdir -p /tmp/avocado-portal /tmp/original-workflows
-          cp -a .github/workflows/. /tmp/original-workflows/
-
-          cat .codex-bootstrap/xz-* > /tmp/portal.tar.xz.b64
-          base64 --decode /tmp/portal.tar.xz.b64 > /tmp/portal.tar.xz
-          echo "89da4adb1f3af6943b239d817dfc3b7a9d6b5173e9a556819fc19cdf9f5b15b6  /tmp/portal.tar.xz" | sha256sum --check -
-          tar --no-same-owner -xJf /tmp/portal.tar.xz -C /tmp/avocado-portal
-
-          cat .codex-bootstrap/docs-* > /tmp/portal-docs.tar.xz.b64
-          base64 --decode /tmp/portal-docs.tar.xz.b64 > /tmp/portal-docs.tar.xz
-          echo "e8a0c2e25079a1b0d6cfe3d902e0b09b7c63dbe68548c7ff1e13cc57bc20dd83  /tmp/portal-docs.tar.xz" | sha256sum --check -
-          tar --no-same-owner -xJf /tmp/portal-docs.tar.xz -C /tmp/avocado-portal
-
-          cp package-lock.json /tmp/avocado-portal/package-lock.json
-          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
-          cp -a /tmp/avocado-portal/. .
-
-          # A workflow token may write source but cannot create or replace workflow files.
-          # Preserve the current workflow directory; the final CI file is installed separately.
-          rm -rf .github/workflows
-          mkdir -p .github/workflows
-          cp -a /tmp/original-workflows/. .github/workflows/
-
-          test -f AGENTS.md
-          test -f CODEX_START_HERE.md
-          test -f docs/plans/0001-public-portal-mvp.md
-          test -f src/app/[locale]/page.tsx
-          test -f package-lock.json
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7.0.0
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install locked dependencies
-        run: npm ci --no-audit --no-fund
-
-      - name: Run content, route, type and lint checks
-        run: npm run check
-
-      - name: Build production application
-        run: npm run build
-
-      - name: Start standalone preview and smoke-test routes
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p .next/standalone/.next
-          if [ -d public ]; then
-            cp -a public .next/standalone/public
-          fi
-          cp -a .next/static .next/standalone/.next/static
-
-          HOSTNAME=127.0.0.1 PORT=3000 node .next/standalone/server.js > /tmp/avocado-preview.log 2>&1 &
-          preview_pid=$!
-          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
-
-          ready=false
-          for attempt in {1..40}; do
-            if curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant > /tmp/zh-Hant.html; then
-              ready=true
-              break
-            fi
-            sleep 1
-          done
-
-          if [ "$ready" != true ]; then
-            cat /tmp/avocado-preview.log
-            exit 1
-          fi
-
-          curl --fail --silent --show-error http://127.0.0.1:3000/en > /tmp/en.html
-          curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant/platform > /tmp/platform.html
-          curl --fail --silent --show-error http://127.0.0.1:3000/en/trust > /tmp/trust.html
-          curl --silent --show-error --dump-header /tmp/root.headers --output /dev/null http://127.0.0.1:3000/
-
-          grep -q 'Avocado.ai' /tmp/zh-Hant.html
-          grep -q 'Avocado.ai' /tmp/en.html
-          grep -qi 'location: /zh-Hant' /tmp/root.headers
-          cat /tmp/avocado-preview.log
-
-      - name: Record validated handoff
-        shell: bash
-        run: |
-          set -euo pipefail
-          cat > docs/BUILD_VALIDATION.md <<EOF
-          # Build Validation
-
-          - Validated in GitHub Actions on $(date -u +'%Y-%m-%d %H:%M:%S UTC').
-          - Runtime: Node.js $(node --version), npm $(npm --version).
-          - Passed: npm ci, content verification, route verification, TypeScript, ESLint, production build.
-          - Preview smoke tests passed for /, /zh-Hant, /en, /zh-Hant/platform, and /en/trust.
-          - Workflow evidence: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
-          EOF
-          rm -f tsconfig.tsbuildinfo
-
-      - name: Commit the validated repository to the isolated branch
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "feat: add bilingual Avocado.ai public portal MVP"
-          git push origin HEAD:codex/public-portal-mvp
+          echo "The bilingual portal source is now fully materialized in the repository."
+          echo "Use the Public Portal CI workflow for install, build, and preview validation."
