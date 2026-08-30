@@ -1,26 +1,23 @@
-import type { Metadata, Viewport } from "next";
-import type { ReactNode } from "react";
-import "./globals.css";
+import { Geist, Geist_Mono } from "next/font/google";
+import "../styles/globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.avocadolab.ai";
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: { default: "Avocado.ai", template: "%s | Avocado.ai" },
-  description: "AI-native Security Operations & Validation Platform",
-  applicationName: "Avocado.ai",
-};
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  themeColor: "#101714",
-  colorScheme: "light",
-};
-
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="zh-Hant">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>{children}</body>
     </html>
   );
