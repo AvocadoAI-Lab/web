@@ -1,0 +1,16 @@
+name: Portal bootstrap archive
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  archived:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm archive status
+        run: |
+          echo "The bilingual Avocado.ai portal source is fully materialized."
+          echo "Use Public Portal CI for install, build, and preview validation."

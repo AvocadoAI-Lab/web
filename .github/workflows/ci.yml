@@ -1,0 +1,72 @@
+name: Public Portal CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, codex/public-portal-mvp-validated]
+
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  quality-build-and-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Run content, route, type, and lint checks
+        run: npm run check
+
+      - name: Build production application
+        run: npm run build
+
+      - name: Start standalone production preview and smoke-test routes
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p .next/standalone/.next
+          if [ -d public ]; then
+            cp -a public .next/standalone/public
+          fi
+          cp -a .next/static .next/standalone/.next/static
+
+          HOSTNAME=127.0.0.1 PORT=3000 node .next/standalone/server.js > /tmp/avocado-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+
+          ready=false
+          for attempt in {1..40}; do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant > /tmp/zh-Hant.html; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+
+          if [ "$ready" != true ]; then
+            cat /tmp/avocado-preview.log
+            exit 1
+          fi
+
+          curl --fail --silent --show-error http://127.0.0.1:3000/en > /tmp/en.html
+          curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant/platform > /tmp/platform.html
+          curl --fail --silent --show-error http://127.0.0.1:3000/en/trust > /tmp/trust.html
+          curl --fail --silent --show-error http://127.0.0.1:3000/en/solutions/healthcare-resilience > /tmp/solution.html
+          curl --silent --show-error --dump-header /tmp/root.headers --output /dev/null http://127.0.0.1:3000/
+
+          grep -q 'Avocado.ai' /tmp/zh-Hant.html
+          grep -q 'Avocado.ai' /tmp/en.html
+          grep -qi 'location: /zh-Hant' /tmp/root.headers
+          cat /tmp/avocado-preview.log

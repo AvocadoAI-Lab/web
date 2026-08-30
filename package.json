@@ -1,24 +1,26 @@
 {
-  "name": "website",
+  "name": "avocado-ai-public-portal",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "verify:content": "node scripts/verify-content.mjs",
+    "verify:routes": "node scripts/verify-routes.mjs",
+    "check": "npm run verify:content && npm run verify:routes && npm run typecheck && npm run lint",
+    "preview": "next start",
+    "preview:smoke": "node scripts/preview-smoke.mjs"
   },
   "dependencies": {
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "framer-motion": "^12.34.3",
-    "geist": "^1.7.0",
-    "lucide-react": "^0.575.0",
     "next": "16.1.6",
-    "next-intl": "^4.8.3",
     "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "tailwind-merge": "^3.5.0"
+    "react-dom": "19.2.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

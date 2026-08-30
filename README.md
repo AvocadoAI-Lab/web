@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Avocado.ai Public Portal V2
 
-## Getting Started
+A Codex-ready, bilingual public portal scaffold for Avocado.ai and the SenseL AI-native Security Operations & Validation Platform.
 
-First, run the development server:
+## What is included
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Traditional Chinese and English routes.
+- Homepage architecture covering platform, three primary solutions, field proof, founders, integrations, trust, resources, and conversion actions.
+- Detailed platform, solution, founder, trust, resources, and contact pages.
+- Repository-native content adapter designed for later CMS replacement.
+- System design, PRD, design system, content model, claims governance, security boundary, roadmap, backlog, test plan, and Codex ExecPlan.
+- CI and repository verification scripts.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Requirements: Node.js 20.9 or newer.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+    cp .env.example .env.local
+    npm run codex:verify
+    npm run preview
 
-## Learn More
+Open:
 
-To learn more about Next.js, take a look at the following resources:
+- `http://localhost:3000/zh-Hant`
+- `http://localhost:3000/en`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Quality checks
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    npm run check
+    npm run build
+    npm run preview:smoke
 
-## Deploy on Vercel
+## Important publication controls
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The site contains draft positioning and anonymous field-proof narratives. Before production launch, complete `docs/content/CLAIMS_LEDGER.md` and `docs/content/FOUNDER_PROFILE_APPROVAL.md`. Do not replace anonymous cases with client names or add quantitative claims without approval.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Architecture boundary
+
+This repository is the public corporate portal only. The authenticated SenseL customer portal must remain a separate application, identity boundary, deployment, and data plane. See `docs/architecture/ADR-001-public-site-boundary.md`.
+
+
+## Scaffold validation note
+
+Repository content and route checks were executed successfully when this package was generated. The artifact environment could not complete npm registry access. Run `npm run codex:verify` in Codex or another connected development environment; it installs dependencies, runs all checks, builds the production bundle, and smoke-tests the production preview. Commit the resulting `package-lock.json` and any required build fixes.
