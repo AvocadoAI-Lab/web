@@ -8,13 +8,16 @@ import { Footer, Header } from "@/components/portal-ui";
 import { content, isLocale, locales, routePaths, type RoutePath, type Site, type Solution } from "@/lib/content";
 
 type Props = { params: Promise<{ locale: string; slug?: string[] }> };
-export const dynamicParams = false;
+
+// Permit the runtime fallback needed by Next.js optional catch-all routes.
+// Unknown locales and paths are still rejected explicitly below with notFound().
+export const dynamicParams = true;
 
 export function generateStaticParams() {
-  return locales.flatMap((locale) => routePaths.map((path) => {
-    const parts = path.split("/").filter(Boolean);
-    return parts.length ? { locale, slug: parts } : { locale };
-  }));
+  return locales.flatMap((locale) => routePaths.map((path) => ({
+    locale,
+    slug: path.split("/").filter(Boolean),
+  })));
 }
 
 function routeFrom(slug?: string[]): RoutePath | null {
