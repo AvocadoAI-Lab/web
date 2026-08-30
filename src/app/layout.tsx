@@ -1,23 +1,29 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "../styles/globals.css";
+import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
+import "./globals.css";
+import { siteUrl } from "@/lib/site";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Avocado.ai",
+    template: "%s | Avocado.ai",
+  },
+  description: "AI-native Security Operations & Validation Platform",
+  applicationName: "Avocado.ai",
+  category: "technology",
+};
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#101714",
+  width: "device-width",
+  initialScale: 1,
+};
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="zh-Hant" suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );

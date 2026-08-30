@@ -1,0 +1,1 @@
+Replace the temporary text mark with approved Avocado.ai SVG and raster assets. Do not commit licensed font files. Record logo permission, color variants, clear-space rules, favicon, and social-preview assets here or in the approved asset system.
