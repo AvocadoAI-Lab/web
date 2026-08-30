@@ -16,24 +16,26 @@ Founder titles and biographies are drafts until approved in `docs/content/FOUNDE
 
 - [x] 2026-08-31: Created repository guidance, product requirements, system design, design system, content governance, security documents, roadmap, backlog, and test plan.
 - [x] 2026-08-31: Selected Next.js App Router, strict TypeScript, Tailwind CSS, repository content adapter, and separate authenticated-portal boundary.
-- [ ] Install dependencies and confirm the documented toolchain works in the target development environment. On 2026-08-31, npm registry access timed out in the artifact environment; repeat this step in Codex or a connected developer environment and commit the generated lockfile.
-- [x] 2026-08-31: Aligned the handoff to the existing web deployment runtime baseline and added automated production-preview smoke tests for both locales and representative detail routes.
-- [x] 2026-08-31: Created the remote handoff branch `codex/public-portal-mvp` and packaged a one-command Codex verification workflow. The connected GitHub surface did not expose file commit/update operations, so the branch still requires the packaged repository to be pushed from a write-capable Codex/Git environment.
 - [x] 2026-08-31: Implemented the bilingual responsive homepage scaffold with hero, proof, problem, closed loop, solutions, field proof, founders, integrations, trust, resources, and final CTA.
 - [x] 2026-08-31: Implemented platform, three solution, founder, trust, resource, and contact routes in both locales.
-- [ ] Run full repository typecheck, lint, and production build after dependency installation. Repository content/route checks and dependency-free TypeScript transpilation/type stubs passed on 2026-08-31.
-- [ ] Perform keyboard, responsive, and content-parity review.
+- [x] 2026-08-31: Aligned package versions to the existing deployment baseline and retained a committed lockfile for deterministic installation.
+- [x] 2026-08-31: Installed dependencies with `npm ci` in a clean Node.js 22 GitHub Actions environment.
+- [x] 2026-08-31: Passed content verification, route verification, strict TypeScript typecheck, ESLint, and Next.js production build.
+- [x] 2026-08-31: Started the production application and passed automated smoke tests for both locales, representative detail pages, redirect behavior, and not-found behavior.
+- [x] 2026-08-31: Deployed a green Vercel preview and opened validated draft PR #3 without changing `main`.
+- [ ] Perform final manual keyboard, responsive, and bilingual-content review.
 - [ ] Replace placeholder brand and founder assets with approved files.
 - [ ] Connect an approved booking or CRM destination.
 - [ ] Obtain stakeholder approval for founder copy and all public claims.
-- [ ] Deploy an internal preview and complete stakeholder review.
+- [ ] Complete stakeholder review and explicitly approve the production merge.
 
 ## Surprises & Discoveries
 
-- The artifact environment could not complete npm registry access within the available execution window. Repository-only verification passed; full dependency installation and Next.js build remain the first Codex validation task.
+- The artifact environment could not resolve the npm registry, so full framework validation was moved to the connected GitHub Actions environment. The clean remote run completed installation, checks, build, and production preview smoke testing successfully.
 - The public corporate site and future authenticated customer portal require different security boundaries; they are intentionally separated.
 - Current internal material contains strong Fab and healthcare evidence, but customer identity, exact numbers, and engagement status require explicit publication permission.
 - Founder positioning is commercially valuable but must be subordinate to platform and field evidence on the homepage.
+- A standalone build and route-level smoke test provide useful release evidence, but do not replace manual visual, keyboard, and device review.
 
 ## Decision Log
 
@@ -41,6 +43,7 @@ Founder titles and biographies are drafts until approved in `docs/content/FOUNDE
 - Decision: use repository-managed bilingual content behind an adapter for MVP. Rationale: claims governance and editorial workflow should be stabilized before selecting a CMS.
 - Decision: use anonymous qualitative field-proof copy in the initial render. Rationale: avoid implying public customer permission or an incorrect commercial status.
 - Decision: present Rain and Eric at equal visual weight under `Founders & Leadership`. Rationale: explain complementary founder fit without making the site a personal-brand page.
+- Decision: keep the validated portal on a draft PR and Vercel preview until visual, content, privacy, and claims approvals are complete. Rationale: technical readiness is not publication approval.
 
 ## Implementation plan
 
@@ -48,38 +51,51 @@ Founder titles and biographies are drafts until approved in `docs/content/FOUNDE
 
 Review package versions and generated configuration against the target Node environment. Install dependencies, run the repository-only scripts, then run typecheck, lint, and build. Fix configuration or framework issues. At the end of this milestone, `npm run check` and `npm run build` should complete successfully on a clean checkout.
 
+Status: completed in GitHub Actions on 2026-08-31.
+
 ### Milestone 2 — Validate the homepage in both locales
 
 Inspect the homepage components and content adapter. Ensure the first viewport communicates category, benefit, and CTA without animation. Validate all sections: proof, customer problem, SenseL closed loop, three solutions, field proof, founders, integrations, trust, resources, and final CTA. Test keyboard navigation and responsive layouts. At the end, `/zh-Hant` and `/en` should render equivalent content with no broken links or horizontal overflow.
+
+Status: automated locale and route validation completed; final manual visual, keyboard, and small-screen review remains.
 
 ### Milestone 3 — Validate supporting pages and conversion
 
 Review the platform, solution, founder, trust, resource, and contact pages. Every page should have localized metadata, one primary action, and consistent navigation. Replace placeholder CTA destinations only with approved environment configuration. At the end, a visitor can move from any primary solution page to a valid next step.
 
+Status: route and production-server smoke tests completed; approved contact and booking destinations remain pending.
+
 ### Milestone 4 — Publication readiness
 
 Replace temporary assets, complete the claims ledger, approve founder copy, add required legal pages, decide analytics and consent, and implement CRM or booking integration with privacy and abuse controls. Add CSP after third-party origins are known and test it in report-only mode. At the end, an internal preview should contain no unresolved public claim and be ready for stakeholder sign-off.
 
+Status: Vercel preview and draft PR are ready for stakeholder review; publication approvals remain pending.
+
 ## Validation and acceptance
 
-Run:
+Completed successfully in the connected CI environment:
 
+    npm ci
     npm run verify:content
     npm run verify:routes
     npm run typecheck
     npm run lint
     npm run build
 
-Then start the application and verify:
+The production application was then started and verified for:
 
-- `/` redirects to `/zh-Hant`.
-- `/zh-Hant` and `/en` render all homepage sections.
-- Each of the three solution routes renders in both locales.
-- `/zh-Hant/company/founders` and `/en/company/founders` show Rain and Eric with draft-approved wording only.
-- Unknown locales and unknown solution slugs return not found.
+- `/` redirecting to `/zh-Hant`.
+- `/zh-Hant` and `/en` rendering the homepage.
+- Representative platform and solution routes in both locales.
+- Founder, Trust Center, resources, and contact routes.
+- Unknown locales and unknown routes returning not found.
+- Rendered content containing no forbidden named-customer or confidential quantitative claim.
+
+Manual acceptance still required:
+
 - Keyboard focus reaches navigation, locale switch, CTAs, and footer in logical order.
 - At 320px there is no horizontal overflow.
-- The rendered site contains no named customer, logo, exact confidential metric, unapproved SLA, or unapproved certification.
+- Founder imagery, wording, CTA destinations, privacy/legal copy, and public claims are approved.
 
 ## Rollback and recovery
 
@@ -87,4 +103,4 @@ Keep content and UI changes separate where practical. If a content claim is chal
 
 ## Outcomes & Retrospective
 
-The repository and plan were initialized on 2026-08-31. Update this section after each milestone with shipped behavior, validation evidence, unresolved approval items, and lessons that should change future plans.
+The bilingual public portal has been materialized in `AvocadoAI-Lab/web`, validated through deterministic dependency installation, content and route checks, strict typechecking, linting, production build, live-server smoke testing, and a green Vercel preview. The implementation remains isolated on `codex/public-portal-mvp-validated` behind draft PR #3, so the existing production branch is unchanged. The remaining work is approval-driven rather than framework-driven: visual review, approved founder assets and copy, public-claims clearance, legal/privacy decisions, and production conversion destinations.

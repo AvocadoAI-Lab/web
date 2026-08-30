@@ -13,8 +13,11 @@
 - Content and internal-route verification scripts.
 - GitHub Actions workflow and pull-request template.
 
-## Validation completed in the artifact environment
+## Validation completed
 
+### Artifact environment
+
+- Source archive SHA-256 verified before extraction.
 - `node scripts/verify-content.mjs` — passed.
 - `node scripts/verify-routes.mjs` — passed.
 - Dependency-free TypeScript/TSX syntax transpilation — passed.
@@ -22,15 +25,23 @@
 - Controlled customer-name scan — no public content occurrences; names exist only in the verifier's forbidden-name list.
 - Credential-pattern scan — no embedded credentials found.
 
-## Validation remaining in the target development environment
+### Connected Codex / GitHub environment
 
-The artifact environment could not finish npm registry access. The first Codex milestone is therefore:
+- Runtime aligned to the existing deployment baseline: Node.js 22, Next.js 16.1.6, React 19.2.3.
+- `npm ci` completed successfully from the committed lockfile.
+- `npm run verify:content` and `npm run verify:routes` passed.
+- Strict TypeScript typecheck passed.
+- ESLint passed.
+- Next.js production build passed.
+- The production server started successfully and smoke tests passed for Traditional Chinese, English, platform, solution, founder, Trust Center, resources, contact, redirect, and not-found routes.
+- GitHub Actions and Vercel deployment checks are green for the validated draft PR.
 
-1. Run `npm install` and commit `package-lock.json`.
-2. Run `npm run check`.
-3. Run `npm run build`.
-4. Run the site and review both locales on desktop and mobile.
-5. Record commands and fixes in `docs/plans/0001-public-portal-mvp.md`.
+## Preview and delivery
+
+- Validated branch: `codex/public-portal-mvp-validated`.
+- Draft review: GitHub PR #3.
+- Vercel preview: `https://webbbb-git-codex-public-portal-mvp-d7d8e2-yucheng1122s-projects.vercel.app`.
+- `main` remains unchanged until the draft PR is explicitly reviewed and merged.
 
 ## Publication approvals still required
 
@@ -39,17 +50,4 @@ The artifact environment could not finish npm registry access. The first Codex m
 - Corporate email, booking destination, and customer-login destination.
 - Customer names, logos, engagement statuses, metrics, SLAs, certifications, and partner marks.
 - Privacy/legal copy, analytics and consent decision, and CRM/form destination.
-
-## 2026-08-31 build handoff update
-
-- Source archive SHA-256 verified before extraction.
-- Runtime versions aligned to the existing web deployment baseline (Next.js 16.1.6 / React 19.2.3).
-- Added `npm run preview:smoke` and a CI production-preview smoke stage.
-- Content verification, route verification, preview-script syntax validation, and dependency-free source type validation passed.
-- A real `npm install` was attempted but the artifact runtime could not reach `registry.npmjs.org`; full framework build and preview remain for the connected Codex/CI environment.
-
-## Remote Codex handoff status
-
-- GitHub branch `codex/public-portal-mvp` was created in `AvocadoAI-Lab/web` from the current `main` commit.
-- The connected GitHub surface available in this execution exposes branch creation and read/status operations, but no file commit/update operation. The branch therefore remains at its base commit until the packaged repository is opened in Codex or pushed from a write-capable Git environment.
-- `CODEX_EXECUTE.md` and `scripts/codex-verify.sh` provide the single-command install, check, production build, and preview smoke-test handoff.
+- Manual responsive, keyboard, and stakeholder visual review before production merge.
