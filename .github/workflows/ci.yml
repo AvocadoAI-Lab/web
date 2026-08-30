@@ -1,0 +1,40 @@
+name: Public Portal CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, codex/public-portal-mvp]
+
+permissions:
+  contents: read
+
+jobs:
+  quality-and-preview-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - name: Start production preview and smoke-test routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run start > /tmp/avocado-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3000/zh-Hant > /tmp/zh.html; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3000/en > /tmp/en.html
+          curl --fail --silent http://127.0.0.1:3000/zh-Hant/platform > /tmp/platform.html
+          curl --fail --silent http://127.0.0.1:3000/en/solutions/healthcare-resilience > /tmp/solution.html
+          grep -q 'Avocado.ai' /tmp/zh.html
+          grep -q 'Avocado.ai' /tmp/en.html
+          cat /tmp/avocado-preview.log
