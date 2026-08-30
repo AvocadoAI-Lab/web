@@ -8,12 +8,13 @@ import { Footer, Header } from "@/components/portal-ui";
 import { content, isLocale, locales, routePaths, type RoutePath, type Site, type Solution } from "@/lib/content";
 
 type Props = { params: Promise<{ locale: string; slug?: string[] }> };
-export const dynamicParams = false;
+export const dynamic = "force-static";
+export const dynamicParams = true;
 
 export function generateStaticParams() {
   return locales.flatMap((locale) => routePaths.map((path) => {
     const parts = path.split("/").filter(Boolean);
-    return parts.length ? { locale, slug: parts } : { locale };
+    return { locale, slug: parts.length ? parts : undefined };
   }));
 }
 
