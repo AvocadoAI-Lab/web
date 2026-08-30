@@ -3,7 +3,7 @@ name: Public Portal CI
 on:
   pull_request:
   push:
-    branches: [main, codex/public-portal-mvp]
+    branches: [main, codex/public-portal-mvp, codex/public-portal-ready]
 
 permissions:
   contents: read
