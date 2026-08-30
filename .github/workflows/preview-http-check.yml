@@ -1,0 +1,47 @@
+name: Preview HTTP Check
+
+on:
+  push:
+    branches:
+      - codex/public-portal-preview
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-public-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Verify Vercel preview routes
+        shell: bash
+        env:
+          PREVIEW_URL: https://webbbb-git-codex-public-portal-preview-yucheng1122s-projects.vercel.app
+        run: |
+          set -euo pipefail
+
+          ready=0
+          for attempt in {1..24}; do
+            status="$(curl --location --silent --show-error --output /tmp/zh-Hant.html --write-out '%{http_code}' "$PREVIEW_URL/zh-Hant" || true)"
+            if [ "$status" = "200" ] && grep -q 'Avocado.ai' /tmp/zh-Hant.html; then
+              ready=1
+              break
+            fi
+            sleep 10
+          done
+
+          if [ "$ready" -ne 1 ]; then
+            echo "Preview did not become ready. Last HTTP status: $status"
+            exit 1
+          fi
+
+          for route in /en /zh-Hant/platform /en/trust /zh-Hant/contact; do
+            output="/tmp/$(echo "$route" | tr '/' '_').html"
+            curl --fail --location --silent --show-error "$PREVIEW_URL$route" --output "$output"
+            grep -q 'Avocado.ai' "$output"
+            echo "PASS $route"
+          done
+
+          echo "PASS /zh-Hant"
+          echo "Preview HTTP verification completed."
