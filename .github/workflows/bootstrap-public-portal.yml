@@ -2,7 +2,7 @@ name: Materialize validated Avocado.ai portal
 
 on:
   push:
-    branches: [codex/public-portal-mvp]
+    branches: [codex/public-portal-mvp-validated]
     paths:
       - ".codex-bootstrap/**"
       - ".github/workflows/bootstrap-public-portal.yml"
@@ -21,7 +21,7 @@ jobs:
       - name: Check out isolated portal branch
         uses: actions/checkout@v5
         with:
-          ref: codex/public-portal-mvp
+          ref: codex/public-portal-mvp-validated
           fetch-depth: 0
 
       - name: Detect staged portal source
@@ -100,12 +100,19 @@ jobs:
           preview_pid=$!
           trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
 
+          ready=false
           for attempt in {1..40}; do
             if curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant > /tmp/zh-Hant.html; then
+              ready=true
               break
             fi
             sleep 1
           done
+
+          if [ "$ready" != true ]; then
+            cat /tmp/avocado-preview.log
+            exit 1
+          fi
 
           curl --fail --silent --show-error http://127.0.0.1:3000/en > /tmp/en.html
           curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant/platform > /tmp/platform.html
@@ -139,4 +146,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "feat: materialize validated bilingual Avocado.ai portal"
-          git push origin HEAD:codex/public-portal-mvp
+          git push origin HEAD:codex/public-portal-mvp-validated
