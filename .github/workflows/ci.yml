@@ -3,7 +3,7 @@ name: Public Portal CI
 on:
   pull_request:
   push:
-    branches: [main, codex/public-portal-mvp]
+    branches: [main, codex/public-portal-mvp-ready]
 
 permissions:
   contents: read
@@ -21,20 +21,37 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
-      - name: Start production preview and smoke-test routes
+      - name: Start standalone preview and smoke-test routes
         shell: bash
         run: |
           set -euo pipefail
-          npm run start > /tmp/avocado-preview.log 2>&1 &
+
+          cp -r public .next/standalone/public
+          mkdir -p .next/standalone/.next
+          cp -r .next/static .next/standalone/.next/static
+
+          HOSTNAME=127.0.0.1 PORT=3000 node .next/standalone/server.js > /tmp/avocado-preview.log 2>&1 &
           preview_pid=$!
           trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+
+          ready=0
           for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:3000/zh-Hant > /tmp/zh.html; then break; fi
+            if curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant > /tmp/zh.html; then
+              ready=1
+              break
+            fi
             sleep 1
           done
-          curl --fail --silent http://127.0.0.1:3000/en > /tmp/en.html
-          curl --fail --silent http://127.0.0.1:3000/zh-Hant/platform > /tmp/platform.html
-          curl --fail --silent http://127.0.0.1:3000/en/solutions/healthcare-resilience > /tmp/solution.html
+
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/avocado-preview.log
+            exit 1
+          fi
+
+          curl --fail --silent --show-error http://127.0.0.1:3000/en > /tmp/en.html
+          curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant/platform > /tmp/platform.html
+          curl --fail --silent --show-error http://127.0.0.1:3000/en/solutions/healthcare-resilience > /tmp/solution.html
+          curl --fail --silent --show-error http://127.0.0.1:3000/_next/static/ > /dev/null || true
           grep -q 'Avocado.ai' /tmp/zh.html
           grep -q 'Avocado.ai' /tmp/en.html
           cat /tmp/avocado-preview.log
