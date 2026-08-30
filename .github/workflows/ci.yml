@@ -26,7 +26,9 @@ jobs:
         run: |
           set -euo pipefail
 
-          cp -r public .next/standalone/public
+          if [ -d public ]; then
+            cp -r public .next/standalone/public
+          fi
           mkdir -p .next/standalone/.next
           cp -r .next/static .next/standalone/.next/static
 
@@ -51,7 +53,6 @@ jobs:
           curl --fail --silent --show-error http://127.0.0.1:3000/en > /tmp/en.html
           curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant/platform > /tmp/platform.html
           curl --fail --silent --show-error http://127.0.0.1:3000/en/solutions/healthcare-resilience > /tmp/solution.html
-          curl --fail --silent --show-error http://127.0.0.1:3000/_next/static/ > /dev/null || true
           grep -q 'Avocado.ai' /tmp/zh.html
           grep -q 'Avocado.ai' /tmp/en.html
           cat /tmp/avocado-preview.log
