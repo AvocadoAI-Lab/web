@@ -142,8 +142,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # The repository token may publish source, but GitHub blocks it from
+          # creating a second workflow. The CI workflow is added afterward by
+          # the GitHub connector with the required permission.
+          rm -f .github/workflows/ci.yml tsconfig.tsbuildinfo
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
+          git diff --cached --check
           git commit -m "feat: materialize validated bilingual Avocado.ai portal"
           git push origin HEAD:codex/public-portal-mvp-validated
