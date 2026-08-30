@@ -21,7 +21,7 @@ permissions:
 jobs:
   diagnose-public-preview:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 5
     env:
       PREVIEW_URL: https://webbbb-git-codex-public-portal-preview-yucheng1122s-projects.vercel.app
       GH_TOKEN: ${{ github.token }}
@@ -36,23 +36,32 @@ jobs:
           body=/tmp/preview-body.html
           headers=/tmp/preview-headers.txt
           status=000
+          effective_url="$PREVIEW_URL/zh-Hant"
           outcome=UNREACHABLE
 
-          for attempt in {1..30}; do
+          for attempt in {1..12}; do
             rm -f "$body" "$headers"
-            status="$(curl --location --silent --show-error \
-              --connect-timeout 10 --max-time 30 \
+            probe="$(curl --location --silent --show-error \
+              --connect-timeout 10 --max-time 25 \
               --dump-header "$headers" --output "$body" \
-              --write-out '%{http_code}' \
+              --write-out $'%{http_code}\t%{url_effective}' \
               "$PREVIEW_URL/zh-Hant" 2>/tmp/preview-curl-error.txt || true)"
-            [ -n "$status" ] || status=000
+
+            if [[ "$probe" == *$'\t'* ]]; then
+              status="${probe%%$'\t'*}"
+              effective_url="${probe#*$'\t'}"
+            else
+              status=000
+            fi
 
             if [ "$status" = "200" ] && grep -q 'Avocado.ai' "$body"; then
               outcome=PASS
               break
             fi
 
-            if [ "$status" = "401" ] || [ "$status" = "403" ]; then
+            if [ "$status" = "401" ] || [ "$status" = "403" ] || \
+               [[ "$effective_url" != "$PREVIEW_URL"* ]] || \
+               grep -Eqi 'authentication required|log in to vercel|vercel authentication|sso-api' "$body" 2>/dev/null; then
               outcome=PROTECTED
               break
             fi
@@ -60,12 +69,14 @@ jobs:
             sleep 10
           done
 
+          safe_effective_url="${effective_url%%\?*}"
           {
             echo "## Vercel preview HTTP diagnostic"
             echo
             echo "- Preview: $PREVIEW_URL"
             echo "- Probe result: **$outcome**"
             echo "- Last HTTP status: **$status**"
+            echo "- Final URL: $safe_effective_url"
             echo "- Commit: \`${GITHUB_SHA}\`"
           } > "$report"
 
@@ -79,7 +90,7 @@ jobs:
             for route in /en /zh-Hant/platform /en/trust /zh-Hant/contact; do
               output="/tmp/$(echo "$route" | tr '/' '_').html"
               route_status="$(curl --location --silent --show-error \
-                --connect-timeout 10 --max-time 30 \
+                --connect-timeout 10 --max-time 25 \
                 --output "$output" --write-out '%{http_code}' \
                 "$PREVIEW_URL$route" || true)"
 
@@ -98,9 +109,9 @@ jobs:
           elif [ "$outcome" = "PROTECTED" ]; then
             {
               echo
-              echo "The deployment is built, but Vercel Deployment Protection prevents anonymous CI access. Open the Preview link while signed in to the Vercel team, or change Preview Deployment Protection in the Vercel project settings."
+              echo "The deployment is built, but Vercel Deployment Protection redirects or blocks anonymous CI access. Open the Preview link while signed in to the Vercel team, or change Preview Deployment Protection in the Vercel project settings."
             } >> "$report"
-            echo "::warning::Vercel preview is access-protected (HTTP $status); this is not a Next.js build failure."
+            echo "::warning::Vercel preview is access-protected; this is not a Next.js build failure."
           else
             {
               echo
