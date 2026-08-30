@@ -5,7 +5,7 @@ on:
     branches: [codex/public-portal-mvp-ready]
 
 permissions:
-  contents: read
+  contents: write
 
 env:
   NEXT_TELEMETRY_DISABLED: "1"
@@ -16,6 +16,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: codex/public-portal-mvp-ready
       - uses: actions/setup-node@v6
         with:
           node-version: 22
@@ -26,9 +28,14 @@ jobs:
           npm install --package-lock-only --ignore-scripts
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
-      - uses: actions/upload-artifact@v7
-        with:
-          name: secure-package-lock
-          path: package-lock.json
-          if-no-files-found: error
-          retention-days: 1
+      - name: Commit the verified lockfile to the Codex branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          if git diff --cached --quiet; then
+            echo "Lockfile is already current."
+            exit 0
+          fi
+          git commit -m "build: refresh secure package lock"
+          git push origin HEAD:codex/public-portal-mvp-ready
