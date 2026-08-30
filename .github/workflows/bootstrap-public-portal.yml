@@ -1,0 +1,110 @@
+name: Bootstrap Avocado.ai Public Portal
+
+on:
+  push:
+    branches:
+      - codex/public-portal-mvp
+    paths:
+      - ".codex-bootstrap/**"
+      - ".github/workflows/bootstrap-public-portal.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install-build-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out staged branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruct and commit the public portal source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp package-lock.json /tmp/package-lock.json
+          cat .codex-bootstrap/chunk-* | base64 --decode > /tmp/avocado-public-portal.zip
+          echo "da7c0f80d8966f5a4cfd19f79c4529a8c7f09df1bb745bc288f412e3b7078da1  /tmp/avocado-public-portal.zip" | sha256sum --check
+
+          rm -rf /tmp/avocado-public-portal
+          mkdir -p /tmp/avocado-public-portal
+          unzip -q /tmp/avocado-public-portal.zip -d /tmp/avocado-public-portal
+
+          git rm -rf .
+          cp -a /tmp/avocado-public-portal/. .
+          cp /tmp/package-lock.json package-lock.json
+          rm -rf .codex-bootstrap .github/workflows/bootstrap-public-portal.yml
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: replace site with bilingual Avocado.ai public portal MVP"
+          git push origin HEAD:codex/public-portal-mvp
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee /tmp/npm-ci.log
+
+      - name: Run content, route, type, and lint checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run check 2>&1 | tee /tmp/check.log
+
+      - name: Build production application
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run build 2>&1 | tee /tmp/build.log
+
+      - name: Start production preview and smoke-test routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          HOSTNAME=127.0.0.1 PORT=3000 npm run start > /tmp/preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+
+          ready=0
+          for attempt in {1..30}; do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant > /tmp/zh-Hant.html; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+
+          if [[ "$ready" != "1" ]]; then
+            cat /tmp/preview.log
+            exit 1
+          fi
+
+          curl --fail --silent --show-error http://127.0.0.1:3000/en > /tmp/en.html
+          curl --fail --silent --show-error http://127.0.0.1:3000/zh-Hant/platform > /tmp/platform.html
+          grep -q "Avocado.ai" /tmp/zh-Hant.html
+          grep -q "Avocado.ai" /tmp/en.html
+          cat /tmp/preview.log
+
+      - name: Preserve validation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-portal-bootstrap-logs
+          if-no-files-found: ignore
+          path: |
+            /tmp/npm-ci.log
+            /tmp/check.log
+            /tmp/build.log
+            /tmp/preview.log
